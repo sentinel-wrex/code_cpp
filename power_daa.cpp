@@ -8,7 +8,8 @@ int power(int num, int pow){
             return num;
         }
         else if(pow<0){
-            return 1/power(num,pow);
+            cout<<"1/";
+            return power(num,-pow);
         }
         int temp = power(num, pow/2);
         if(pow%2==0){
@@ -27,3 +28,6 @@ int main(){
     
     cout<<power(x,y)<<endl;
 }
+
+
+
