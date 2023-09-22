@@ -3,6 +3,7 @@ using namespace std;
 
 
 void findFrequency(int arr[], int n) {
+    int sum = 0;
     for (int i = 0; i < n; ++i) {
         if (arr[i] == -1) continue;  
 
@@ -16,8 +17,13 @@ void findFrequency(int arr[], int n) {
             }
         }
 
-        cout << arr[i] << ": " << freq << " times\n";
+        //cout << arr[i] << ": " << freq << " times\n";
+        
+        sum = sum + freq;
+        
     }
+    cout<< sum<<endl;
+    
 }
 
 int main() {
