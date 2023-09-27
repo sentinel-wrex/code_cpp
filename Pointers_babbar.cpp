@@ -28,4 +28,8 @@ int main()
     cout<<"Value is "<<*arr+1<<endl;
     
     cout<<"Value is of bracket "<<*(arr+1)<<endl;
+
+    // IMPORTANT
+    // arr[i] == *(arr+i) ==
+    // i[arr] == *(i+arr)
 }
