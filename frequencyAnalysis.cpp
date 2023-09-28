@@ -19,7 +19,7 @@ void findFrequency(int arr[], int n) {
 
         //cout << arr[i] << ": " << freq << " times\n";
         
-        sum = sum + freq;
+        sum = sum + freq ;
         
     }
     cout<< sum<<endl;
