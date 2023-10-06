@@ -1,71 +1,67 @@
-#include <iostream>
-#include <vector>
-#include <unordered_set>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// Function to generate the alpha set for a given string
-void generateAlphaSet(const string& s, string current, int index, unordered_set<string>& alphaSet) {
-    if (index == s.length()) {
-        if (!current.empty()) {
-            alphaSet.insert(current);
-        }
-        return;
-    }
+/*This function takes first element as pivot, the function
+places the pivot element(first element) on its sorted
+position and all the element lesser than pivot will placed
+left to it, and all the element greater than pivot placed
+right to it.*/
 
-    // Include the current character
-    generateAlphaSet(s, current + s[index], index + 1, alphaSet);
+int partition(int arr[], int low, int high)
+{
 
-    // Exclude the current character
-    generateAlphaSet(s, current, index + 1, alphaSet);
+	// First element as pivot
+	int pivot = arr[low];
+	int st = low; // st points to the starting of array
+	int end = high; // end points to the ending of the array
+	int k = high;
+	for (int i = high; i > low; i--) {
+		if (arr[i] > pivot)
+			swap(arr[i], arr[k--]);
+	}
+	swap(arr[low], arr[k]);
+	// As we got pivot element index is end
+	// now pivot element is at its sorted position
+	// return pivot element index (end)
+	return k;
 }
 
-// Function to find the length of the longest common string among alpha sets of given strings
-int lengthOfLongestCommonStringAlphaSet(const vector<string>& strings) {
-    vector<unordered_set<string>> alphaSets;
+/* The main function that implements QuickSort
+arr[] --> Array to be sorted,
+low --> Starting index,
+high --> Ending index */
+void quickSort(int arr[], int low, int high)
+{
+	// If low is lesser than high
+	if (low < high) {
+		// idx is index of pivot element which is at its
+		// sorted position
+		int idx = partition(arr, low, high);
 
-    // Generate alpha sets for each string
-    for (const string& s : strings) {
-        unordered_set<string> alphaSet;
-        generateAlphaSet(s, "", 0, alphaSet);
-        alphaSets.push_back(alphaSet);
-    }
-
-    // Find common elements among alpha sets
-    unordered_set<string> commonElements = alphaSets[0];
-    for (int i = 1; i < alphaSets.size(); ++i) {
-        unordered_set<string> currentSet = alphaSets[i];
-        vector<string> intersectionResult;
-        set_intersection(
-            commonElements.begin(), commonElements.end(),
-            currentSet.begin(), currentSet.end(),
-            inserter(intersectionResult, intersectionResult.begin())
-        );
-        commonElements = unordered_set<string>(intersectionResult.begin(), intersectionResult.end());
-    }
-
-    // Find the length of the longest common string
-    int lengthOfLongestCommon = 0;
-    for (const string& s : commonElements) {
-        lengthOfLongestCommon = max(lengthOfLongestCommon, static_cast<int>(s.length()));
-    }
-
-    return lengthOfLongestCommon;
+		// Separately sort elements before
+		// partition and after partition
+		quickSort(arr, low, idx - 1);
+		quickSort(arr, idx + 1, high);
+	}
 }
 
-int main() {
-    int N;
-    cin >> N;  // Number of strings
-
-    vector<string> strings(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> strings[i];  // Input each string
-    }
-
-    int result = lengthOfLongestCommonStringAlphaSet(strings);
-
-    cout << result << endl;
-
-    return 0;
+/* Function to print an array */
+void printArray(int arr[], int size)
+{
+	int i;
+	for (i = 0; i < size; i++)
+		cout << arr[i] << " ";
+	cout << endl;
 }
+
+// Driver Code
+int main()
+{
+	int arr[] = { 7, 6, 10, 5, 9, 2, 1, 15, 7 };
+	int n = sizeof(arr) / sizeof(arr[0]);
+	quickSort(arr, 0, n - 1);
+	cout << "Sorted array: \n";
+	printArray(arr, n);
+	return 0;
+}
+
