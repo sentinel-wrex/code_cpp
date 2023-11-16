@@ -1,67 +1,58 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-/*This function takes first element as pivot, the function
-places the pivot element(first element) on its sorted
-position and all the element lesser than pivot will placed
-left to it, and all the element greater than pivot placed
-right to it.*/
+class Solution {
+  void findTopoSort(int node, vector < int > & vis, stack < int > & st, vector < int > adj[]) {
+    vis[node] = 1;
 
-int partition(int arr[], int low, int high)
-{
+    for (auto it: adj[node]) {
+      if (!vis[it]) {
+        findTopoSort(it, vis, st, adj);
+      }
+    }
+    st.push(node);
+  }
+  public:
+    vector < int > topoSort(int N, vector < int > adj[]) {
+      stack < int > st;
+      vector < int > vis(N, 0);
+      for (int i = 0; i < N; i++) {
+        if (vis[i] == 0) {
+          findTopoSort(i, vis, st, adj);
+        }
+      }
+      vector < int > topo;
+      while (!st.empty()) {
+        topo.push_back(st.top());
+        st.pop();
+      }
+      return topo;
 
-	// First element as pivot
-	int pivot = arr[low];
-	int st = low; // st points to the starting of array
-	int end = high; // end points to the ending of the array
-	int k = high;
-	for (int i = high; i > low; i--) {
-		if (arr[i] > pivot)
-			swap(arr[i], arr[k--]);
-	}
-	swap(arr[low], arr[k]);
-	// As we got pivot element index is end
-	// now pivot element is at its sorted position
-	// return pivot element index (end)
-	return k;
+    }
+};
+
+// { Driver Code Starts.
+int main() {
+
+  int N = 6;
+
+  vector < int > adj[5 + 1];
+
+  adj[5].push_back(2);
+  adj[5].push_back(0);
+  adj[4].push_back(0);
+  adj[4].push_back(1);
+  adj[2].push_back(3);
+  adj[3].push_back(1);
+
+  Solution obj;
+  vector < int > res = obj.topoSort(6, adj);
+
+  cout << "Toposort of the given graph is:" << endl;
+  for (int i = 0; i < res.size(); i++) {
+    cout << res[i] << " ";
+  }
+
+  return 0;
 }
-
-/* The main function that implements QuickSort
-arr[] --> Array to be sorted,
-low --> Starting index,
-high --> Ending index */
-void quickSort(int arr[], int low, int high)
-{
-	// If low is lesser than high
-	if (low < high) {
-		// idx is index of pivot element which is at its
-		// sorted position
-		int idx = partition(arr, low, high);
-
-		// Separately sort elements before
-		// partition and after partition
-		quickSort(arr, low, idx - 1);
-		quickSort(arr, idx + 1, high);
-	}
-}
-
-/* Function to print an array */
-void printArray(int arr[], int size)
-{
-	int i;
-	for (i = 0; i < size; i++)
-		cout << arr[i] << " ";
-	cout << endl;
-}
-
-// Driver Code
-int main()
-{
-	int arr[] = { 7, 6, 10, 5, 9, 2, 1, 15, 7 };
-	int n = sizeof(arr) / sizeof(arr[0]);
-	quickSort(arr, 0, n - 1);
-	cout << "Sorted array: \n";
-	printArray(arr, n);
-	return 0;
-}
-
